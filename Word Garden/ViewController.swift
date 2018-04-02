@@ -17,7 +17,16 @@ class ViewController: UIViewController {
     @IBOutlet weak var playAgainButton: UIButton!
     @IBOutlet weak var flowerImageView: UIImageView!
     
+    var wordsToGuess = ["SWIFT",
+                        "INTERPRETER",
+                        "MUTABLE",
+                        "PROGRAMMER",
+                        "SUPERHERO",
+                        "DEVELOPER",
+                        "DESIGNER"]
+    
     var wordToGuess = "SWIFT"
+    var wordToGuessIndex = 0
     var lettersGuessed = ""
     let maxNumberOfWrongGuesses = 8
     var wrongGuessesRemaining = 8
@@ -26,6 +35,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        wordToGuess = wordsToGuess[wordToGuessIndex]
         guessLetterButton.isEnabled = false
         playAgainButton.isHidden = true
         formatUserGuessLabel()
@@ -62,14 +72,14 @@ class ViewController: UIViewController {
             flowerImageView.image = UIImage(named: "flower\(wrongGuessesRemaining)")
         }
         
-        let revealedWord = guessedLetterField.text!
+        let revealedWord = userGuessLabel.text!
         // Stop game if wrongGuessesRemaining = 0
         if wrongGuessesRemaining == 0 {
             playAgainButton.isHidden = false
             guessedLetterField.isEnabled = false
             guessLetterButton.isEnabled = false
             guessCountLabel.text = "Sorry, you're out of guesses. Try again?"
-        } else if revealedWord.contains("_") {
+        } else if !revealedWord.contains("_") {
             // You've won the game!
             playAgainButton.isHidden = false
             guessedLetterField.isEnabled = false
@@ -103,6 +113,12 @@ class ViewController: UIViewController {
     }
     
     @IBAction func playAgainButtonPressed(_ sender: UIButton) {
+        wordToGuessIndex += 1
+        if wordToGuessIndex == wordsToGuess.count {
+            wordToGuessIndex = 0
+        }
+        wordToGuess = wordsToGuess[wordToGuessIndex]
+        
         playAgainButton.isHidden = true
         guessedLetterField.isEnabled = true
         guessLetterButton.isEnabled = false
